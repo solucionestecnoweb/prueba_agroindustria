@@ -53,7 +53,7 @@
                     <tr style="font-size:13px;">
                       <td>EMAIL:</td>
                       <td colspan="3"><t t-esc="docs.partner_id.email"/></td>
-                      <td colspan="2" style="font-size:12px;">FECHA DE EMISIÓN:<t t-esc="docs.formato_fecha(docs.date_actual)"/></td>
+                      <td colspan="2" style="font-size:12px;">FECHA DE EMISIÓN:<t t-esc="docs.formato_fecha(docs.invoice_date)"/></td>
                     </tr>
                     <tbody class="table table-bordered">
                       <tr align="center" style="font-size:12px;">
