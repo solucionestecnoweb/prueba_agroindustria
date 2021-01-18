@@ -64,11 +64,18 @@ class AccountMove(models.Model):
             cuenta_clien_cobrar=self.partner_id.property_account_receivable_id.id
             cuenta_prove_pagar = self.partner_id.property_account_payable_id.id
         if tipo_factt=="proveedor":
-            porcentaje_ret=self.company_id.partner_id.vat_retention_rate #usar para meterlo en la tabla vat.retention
-            cuenta_ret_cobrar=self.company_id.partner_id.account_ret_receivable_id.id # USAR PARA COMPARAR CON EL CAMPO ACCOUNT_ID DE LA TABLA ACCOUNT_MOVE_LINE
-            cuenta_ret_pagar = self.company_id.partner_id.account_ret_payable_id.id # USAR PARA COMPARAR CON EL CAMPO ACCOUNT_ID DE LA TABLA ACCOUNT_MOVE_LINE
-            cuenta_clien_cobrar=self.company_id.partner_id.property_account_receivable_id.id
-            cuenta_prove_pagar = self.company_id.partner_id.property_account_payable_id.id
+            if self.company_id.confg_ret_proveedores=="c":
+                porcentaje_ret=self.company_id.partner_id.vat_retention_rate #usar para meterlo en la tabla vat.retention
+                cuenta_ret_cobrar=self.company_id.partner_id.account_ret_receivable_id.id # USAR PARA COMPARAR CON EL CAMPO ACCOUNT_ID DE LA TABLA ACCOUNT_MOVE_LINE
+                cuenta_ret_pagar = self.company_id.partner_id.account_ret_payable_id.id # USAR PARA COMPARAR CON EL CAMPO ACCOUNT_ID DE LA TABLA ACCOUNT_MOVE_LINE
+                cuenta_clien_cobrar=self.company_id.partner_id.property_account_receivable_id.id
+                cuenta_prove_pagar = self.company_id.partner_id.property_account_payable_id.id
+            if self.company_id.confg_ret_proveedores=="p":
+                porcentaje_ret=self.partner_id.vat_retention_rate #usar para meterlo en la tabla vat.retention
+                cuenta_ret_cobrar=self.partner_id.account_ret_receivable_id.id # USAR PARA COMPARAR CON EL CAMPO ACCOUNT_ID DE LA TABLA ACCOUNT_MOVE_LINE
+                cuenta_ret_pagar = self.partner_id.account_ret_payable_id.id # USAR PARA COMPARAR CON EL CAMPO ACCOUNT_ID DE LA TABLA ACCOUNT_MOVE_LINE
+                cuenta_clien_cobrar=self.partner_id.property_account_receivable_id.id
+                cuenta_prove_pagar = self.partner_id.property_account_payable_id.id
         #raise UserError(_('id_factura = %s')%id_factura) 
         valor_iva=self.amount_tax # ya este valo ya no me sirve segun la nueva metodologia
         valor_ret=round(float(valor_iva*porcentaje_ret/100),2)

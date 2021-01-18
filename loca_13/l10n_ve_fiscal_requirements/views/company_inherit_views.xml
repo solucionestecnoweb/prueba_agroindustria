@@ -30,6 +30,12 @@
                     </group>
                 </page>
             </xpath>
+
+            <xpath expr="//group[@name='social_media']" position="after">
+                    <group string="Configuración para los comprobantes de retenciones a Proveedores" aling="center">
+                        <field name="confg_ret_proveedores" string="Se configura las Ret. a Proveedores a través de:" widget="selection_badge"/>
+                    </group>
+                </xpath>
         </field>
     </record>
 </odoo>

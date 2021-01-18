@@ -133,11 +133,11 @@ class RetentionVat(models.Model):
     journal_id=fields.Char(string='journal_id')
     move_id = fields.Many2one('account.move', string='Id del movimiento')
 
-    def unlink(self):
+    """def unlink(self):
         for vat in self:
             if vat.state=='posted':
                 raise UserError(_("El comprobante de retencion IVA ya esta Publicado, No se puede eliminar"))
-        return super(RetentionVat,self).unlink()      
+        return super(RetentionVat,self).unlink() """     
 
     def formato_fecha2(self):
         fecha = str(self.voucher_delivery_date)
@@ -502,8 +502,12 @@ class RetentionVat(models.Model):
             id_journal=self.partner_id.ret_jrl_id.id
             rate_valor=self.partner_id.vat_retention_rate
         if self.type=="in_invoice" or self.type=="in_refund" or self.type=="in_receipt":
-            id_journal=self.company_id.partner_id.ret_jrl_id.id
-            rate_valor=self.company_id.partner_id.vat_retention_rate
+            if self.company_id.confg_ret_proveedores=="c":
+                id_journal=self.company_id.partner_id.ret_jrl_id.id
+                rate_valor=self.company_id.partner_id.vat_retention_rate
+            if self.company_id.confg_ret_proveedores=="p":
+                id_journal=self.partner_id.ret_jrl_id.id
+                rate_valor=self.partner_id.vat_retention_rate
         #raise UserError(_('papa = %s')%signed_amount_total)
         value = {
             'name': name,
@@ -537,11 +541,18 @@ class RetentionVat(models.Model):
             cuenta_prove_pagar = self.partner_id.property_account_payable_id.id
             rate_valor=self.partner_id.vat_retention_rate
         if self.type=="in_invoice" or self.type=="in_refund" or self.type=="in_receipt":
-            cuenta_ret_cliente=self.company_id.partner_id.account_ret_receivable_id.id# cuenta retencion cliente
-            cuenta_ret_proveedor=self.company_id.partner_id.account_ret_payable_id.id#cuenta retencion proveedores
-            cuenta_clien_cobrar=self.company_id.partner_id.property_account_receivable_id.id
-            cuenta_prove_pagar = self.company_id.partner_id.property_account_payable_id.id
-            rate_valor=self.company_id.partner_id.vat_retention_rate
+            if self.company_id.confg_ret_proveedores=="c":
+                cuenta_ret_cliente=self.company_id.partner_id.account_ret_receivable_id.id# cuenta retencion cliente
+                cuenta_ret_proveedor=self.company_id.partner_id.account_ret_payable_id.id#cuenta retencion proveedores
+                cuenta_clien_cobrar=self.company_id.partner_id.property_account_receivable_id.id
+                cuenta_prove_pagar = self.company_id.partner_id.property_account_payable_id.id
+                rate_valor=self.company_id.partner_id.vat_retention_rate
+            if self.company_id.confg_ret_proveedores=="p":
+                cuenta_ret_cliente=self.partner_id.account_ret_receivable_id.id# cuenta retencion cliente
+                cuenta_ret_proveedor=self.partner_id.account_ret_payable_id.id#cuenta retencion proveedores
+                cuenta_clien_cobrar=self.partner_id.property_account_receivable_id.id
+                cuenta_prove_pagar = self.partner_id.property_account_payable_id.id
+                rate_valor=self.partner_id.vat_retention_rate
 
         tipo_empresa=self.move_id.type
         #raise UserError(_('papa = %s')%tipo_empresa)

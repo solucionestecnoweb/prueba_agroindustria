@@ -186,33 +186,35 @@ class AccountMove(models.Model):
         super().button_draft()
         #raise UserError(_('Mi Bebe:%s')%self)
         # LINEA DE CODIGO QUE ELIMINA LAS CONSILIACIONES SECUNDARIAS DE ANTICIPO
-        conciliacion=self.env['account.partial.reconcile'].search([('consi_secu_move_id','=',self.id)])
-        conciliacion.with_context(force_delete=True).unlink()
-        # FIN LINEA DE CODIGO QUE ELIMINA LAS CONSILIACIONES SECUNDARIAS DE ANTICIPO
+        for selff in self:
+            conciliacion=selff.env['account.partial.reconcile'].search([('consi_secu_move_id','=',selff.id)])
+            #raise UserError(_('Mi Bebe:%s')%conciliacion)
+            conciliacion.with_context(force_delete=True).unlink()
+            # FIN LINEA DE CODIGO QUE ELIMINA LAS CONSILIACIONES SECUNDARIAS DE ANTICIPO
 
-        monto_factura=self.amount_total
-        monto_residual=self.amount_residual
-        saldo_actual=self.payment_id.saldo_disponible
-        #saldo_inicial=monto_factura-monto_residual
-        if self.type!="entry":
-            #raise UserError(_('Mi Bebe2:'))
-            #raise UserError(_('Mi Bebe:%s')%self.payment_id.anticipo)
-            #if self.payment_id.anticipo==True:
-            cursor_payment = self.env['account.payment'].search([('move_id','=',self.id)])
-            #raise UserError(_('Mi Bebe:%s')%cursor_payment)
-            if cursor_payment:
-                for det_payment in cursor_payment:
-                    id_mov_anti=det_payment.anticipo_move_id.id
-                    #raise UserError(_('Mi Bebe:%s')%det_payment.amount)
-                    saldo_inicial=det_payment.anticipo_move_id.amount_total+saldo_actual
-                    self.env['account.payment'].browse(det_payment.id).write({
-                                    'usado':False,
-                                    #'saldo_disponible':saldo_inicial,
-                                    'saldo_disponible':det_payment.amount,
-                                    })
-                    cursor_anticipo = self.env['account.move'].search([('id','=',id_mov_anti)])
-                    #cursor_anticipo.filtered(lambda move: move.state == 'posted').button_draft()
-                    cursor_anticipo.with_context(force_delete=True).unlink()
+            monto_factura=selff.amount_total
+            monto_residual=selff.amount_residual
+            saldo_actual=selff.payment_id.saldo_disponible
+            #saldo_inicial=monto_factura-monto_residual
+            if selff.type!="entry":
+                #raise UserError(_('Mi Bebe2:'))
+                #raise UserError(_('Mi Bebe:%s')%self.payment_id.anticipo)
+                #if self.payment_id.anticipo==True:
+                cursor_payment = selff.env['account.payment'].search([('move_id','=',selff.id)])
+                #raise UserError(_('Mi Bebe:%s')%cursor_payment)
+                if cursor_payment:
+                    for det_payment in cursor_payment:
+                        id_mov_anti=det_payment.anticipo_move_id.id
+                        #raise UserError(_('Mi Bebe:%s')%det_payment.amount)
+                        saldo_inicial=det_payment.anticipo_move_id.amount_total+saldo_actual
+                        selff.env['account.payment'].browse(det_payment.id).write({
+                                        'usado':False,
+                                        #'saldo_disponible':saldo_inicial,
+                                        'saldo_disponible':det_payment.amount,
+                                        })
+                        cursor_anticipo = selff.env['account.move'].search([('id','=',id_mov_anti)])
+                        #cursor_anticipo.filtered(lambda move: move.state == 'posted').button_draft()
+                        cursor_anticipo.with_context(force_delete=True).unlink()
 
 
 #************ funcionpara que funcione en lanta *************

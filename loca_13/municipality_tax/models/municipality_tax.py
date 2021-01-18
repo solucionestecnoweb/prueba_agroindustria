@@ -334,7 +334,10 @@ class MUnicipalityTax(models.Model):
         if self.type=="out_invoice" or self.type=="out_refund" or self.type=="out_receipt":
             id_journal=self.partner_id.purchase_jrl_id.id
         if self.type=="in_invoice" or self.type=="in_refund" or self.type=="in_receipt":
-            id_journal=self.company_id.partner_id.purchase_jrl_id.id
+            if self.company_id.confg_ret_proveedores=="c":
+                id_journal=self.company_id.partner_id.purchase_jrl_id.id
+            if self.company_id.confg_ret_proveedores=="p":
+                id_journal=self.partner_id.purchase_jrl_id.id
 
         value = {
             'name': name,
@@ -364,10 +367,16 @@ class MUnicipalityTax(models.Model):
             cuenta_prove_pagar = self.partner_id.property_account_payable_id.id
 
         if self.type=="in_invoice" or self.type=="in_refund" or self.type=="in_receipt":
-            cuenta_ret_cliente=self.company_id.partner_id.account_ret_muni_receivable_id.id# cuenta retencion cliente
-            cuenta_ret_proveedor=self.company_id.partner_id.account_ret_muni_payable_id.id#cuenta retencion proveedores
-            cuenta_clien_cobrar=self.company_id.partner_id.property_account_receivable_id.id
-            cuenta_prove_pagar = self.company_id.partner_id.property_account_payable_id.id
+            if self.company_id.confg_ret_proveedores=="c":
+                cuenta_ret_cliente=self.company_id.partner_id.account_ret_muni_receivable_id.id# cuenta retencion cliente
+                cuenta_ret_proveedor=self.company_id.partner_id.account_ret_muni_payable_id.id#cuenta retencion proveedores
+                cuenta_clien_cobrar=self.company_id.partner_id.property_account_receivable_id.id
+                cuenta_prove_pagar = self.company_id.partner_id.property_account_payable_id.id
+            if self.company_id.confg_ret_proveedores=="p":
+                cuenta_ret_cliente=self.partner_id.account_ret_muni_receivable_id.id# cuenta retencion cliente
+                cuenta_ret_proveedor=self.partner_id.account_ret_muni_payable_id.id#cuenta retencion proveedores
+                cuenta_clien_cobrar=self.partner_id.property_account_receivable_id.id
+                cuenta_prove_pagar = self.partner_id.property_account_payable_id.id
 
         tipo_empresa=self.type
         #raise UserError(_('darrell = %s')%tipo_empresa)

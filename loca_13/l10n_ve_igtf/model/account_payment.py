@@ -306,9 +306,10 @@ class account_payment(models.Model):
     def action_draft(self):
         id_pago=self.id
         move_itf_idd=self.move_itf_id.id
-
-        mov_igtf=self.env['account.move'].search([('id','=',move_itf_idd)])
-        mov_igtf.with_context(force_delete=True).unlink()
+        if move_itf_idd:
+            mov_igtf=self.env['account.move'].search([('id','=',move_itf_idd)])
+            mov_igtf.filtered(lambda move: move.state == 'posted').button_draft()
+            mov_igtf.with_context(force_delete=True).unlink()
 
         # CODIGO ORIGINAL DEL SISTEMA NO TOCAR
         moves = self.mapped('move_line_ids.move_id')
@@ -316,9 +317,10 @@ class account_payment(models.Model):
         moves.with_context(force_delete=True).unlink()
         self.write({'state': 'draft'})
         # FIN CODIGO ORIGINAL
-
-        """if move_itf_idd: # AQUI ELIMINA EL ASIENTO IGTF AL CANCELAr un pago
-            igtf=self.env['account.move'].search([('id','=',move_itf_idd)])
-            igtf.filtered(lambda move: move.state == 'posted').button_draft()
-            igtf.with_context(force_delete=True).unlink()"""
+        # AQUI ELIMINA EL ASIENTO IGTF AL CANCELAr un pago
+        """if move_itf_idd:
+            for move_igtf_iddd in move_igtf_idd:
+                igtf=self.env['account.move'].search([('id','=',move_itf_iddd)])
+                igtf.filtered(lambda move: move.state == 'posted').button_draft()
+                igtf.with_context(force_delete=True).unlink()"""
             #raise UserError(_('El id Move = %s')%igtf)

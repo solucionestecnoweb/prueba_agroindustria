@@ -71,13 +71,22 @@ class AccountMove(models.Model):
 
         if self.type=="in_invoice" or self.type=="in_refund" or self.type=="in_receipt":
             tipo_fact="proveedor"
-            if self.company_id.partner_id.ret_agent:
-                ban=0
-                ban=self.verifica_exento_iva()
-                if ban>0:
-                    self.action_create_vat_retention(tipo_fact)
-                    id_vat_ret=self.vat_ret_id.id
-                    self.actualiza_voucher(id_vat_ret,tipo_fact) #self.asiento_retencion(self.id,id_vat_ret) #funtcion darrell
+            if self.company_id.confg_ret_proveedores=="c":
+                if self.company_id.partner_id.ret_agent:
+                    ban=0
+                    ban=self.verifica_exento_iva()
+                    if ban>0:
+                        self.action_create_vat_retention(tipo_fact)
+                        id_vat_ret=self.vat_ret_id.id
+                        self.actualiza_voucher(id_vat_ret,tipo_fact) #self.asiento_retencion(self.id,id_vat_ret) #funtcion darrell
+            if self.company_id.confg_ret_proveedores=="p":
+                if self.partner_id.ret_agent:
+                    ban=0
+                    ban=self.verifica_exento_iva()
+                    if ban>0:
+                        self.action_create_vat_retention(tipo_fact)
+                        id_vat_ret=self.vat_ret_id.id
+                        self.actualiza_voucher(id_vat_ret,tipo_fact)
 
 
     def funcion_numeracion_fac(self):
@@ -183,7 +192,7 @@ class AccountMove(models.Model):
         vals = {
             'rif': self.rif,
             'partner_id': self.partner_id.id,
-            'accouting_date': datetime.now(),
+            'accouting_date': self.date, #datetime.now(),
             'invoice_number': self.invoice_number,
             'invoice_id': self.id,
             #'amount_untaxed': self.amount_untaxed,
@@ -198,7 +207,12 @@ class AccountMove(models.Model):
             type_tax_use='sale'
 
         if tipo_facttt=="proveedor":
-            por_ret=self.company_id.partner_id.vat_retention_rate
+            if self.company_id.confg_ret_proveedores=="p":
+                #raise UserError(_('proveedor'))
+                por_ret=self.partner_id.vat_retention_rate
+            if self.company_id.confg_ret_proveedores=="c":
+                #raise UserError(_('compañia'))
+                por_ret=self.company_id.partner_id.vat_retention_rate
             type_tax_use='purchase'
 
         #lista_movline = self.env['account.move.line'].search([('move_id','=',self.id)])
@@ -288,11 +302,18 @@ class AccountMove(models.Model):
             cuenta_clien_cobrar=self.partner_id.property_account_receivable_id.id
             cuenta_prove_pagar = self.partner_id.property_account_payable_id.id
         if tipo_factt=="proveedor":
-            porcentaje_ret=self.company_id.partner_id.vat_retention_rate #usar para meterlo en la tabla vat.retention
-            cuenta_ret_cobrar=self.company_id.partner_id.account_ret_receivable_id.id # USAR PARA COMPARAR CON EL CAMPO ACCOUNT_ID DE LA TABLA ACCOUNT_MOVE_LINE
-            cuenta_ret_pagar = self.company_id.partner_id.account_ret_payable_id.id # USAR PARA COMPARAR CON EL CAMPO ACCOUNT_ID DE LA TABLA ACCOUNT_MOVE_LINE
-            cuenta_clien_cobrar=self.company_id.partner_id.property_account_receivable_id.id
-            cuenta_prove_pagar = self.company_id.partner_id.property_account_payable_id.id
+            if self.company_id.confg_ret_proveedores=="c":
+                porcentaje_ret=self.company_id.partner_id.vat_retention_rate #usar para meterlo en la tabla vat.retention
+                cuenta_ret_cobrar=self.company_id.partner_id.account_ret_receivable_id.id # USAR PARA COMPARAR CON EL CAMPO ACCOUNT_ID DE LA TABLA ACCOUNT_MOVE_LINE
+                cuenta_ret_pagar = self.company_id.partner_id.account_ret_payable_id.id # USAR PARA COMPARAR CON EL CAMPO ACCOUNT_ID DE LA TABLA ACCOUNT_MOVE_LINE
+                cuenta_clien_cobrar=self.company_id.partner_id.property_account_receivable_id.id
+                cuenta_prove_pagar = self.company_id.partner_id.property_account_payable_id.id
+            if self.company_id.confg_ret_proveedores=="p":
+                porcentaje_ret=self.partner_id.vat_retention_rate #usar para meterlo en la tabla vat.retention
+                cuenta_ret_cobrar=self.partner_id.account_ret_receivable_id.id # USAR PARA COMPARAR CON EL CAMPO ACCOUNT_ID DE LA TABLA ACCOUNT_MOVE_LINE
+                cuenta_ret_pagar = self.partner_id.account_ret_payable_id.id # USAR PARA COMPARAR CON EL CAMPO ACCOUNT_ID DE LA TABLA ACCOUNT_MOVE_LINE
+                cuenta_clien_cobrar=self.partner_id.property_account_receivable_id.id
+                cuenta_prove_pagar = self.partner_id.property_account_payable_id.id
         #raise UserError(_('id_factura = %s')%id_factura) 
         valor_iva=self.amount_tax # ya este valo ya no me sirve segun la nueva metodologia
         valor_ret=round(float(valor_iva*porcentaje_ret/100),2)

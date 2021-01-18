@@ -294,5 +294,6 @@ class AccountMove(models.Model):
 
     def button_draft(self):
         super().button_draft()
-        temporal=self.env['account.move.line.resumen'].search([('invoice_id','=',self.id)])
-        temporal.with_context(force_delete=True).unlink()
+        for selff in self:
+            temporal=selff.env['account.move.line.resumen'].search([('invoice_id','=',selff.id)])
+            temporal.with_context(force_delete=True).unlink()

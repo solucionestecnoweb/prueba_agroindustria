@@ -55,7 +55,11 @@
                         <hr/>
                         <b><span t-esc="o.company_id.name"/></b>
                         <br/>
+<<<<<<< HEAD
+                        <b>Autorizado por:</b>
+=======
                         <b>Usuario Autorizado</b>
+>>>>>>> 20b1f217fa8508a71701158505338f71c0a15222
                         <br/>
                         <span t-esc="o.create_uid.partner_id.name"/>
                     </div>
@@ -85,7 +89,11 @@
                     </div>
 
                 </div> 
+<<<<<<< HEAD
+                <span t-field="o.write_uid.name"/> 
+=======
                 Usuario:<span t-field="o.write_uid.name"/> 
+>>>>>>> 20b1f217fa8508a71701158505338f71c0a15222
                 <br/>
                 <span t-field="o.invoice_id.company_id.name"/>
                 <br/>
@@ -107,7 +115,11 @@
                     </div>
                 </div>  
 
+<<<<<<< HEAD
+                <span t-field="o.write_uid.name"/> 
+=======
                 Usuario:<span t-field="o.write_uid.name"/> 
+>>>>>>> 20b1f217fa8508a71701158505338f71c0a15222
                 <br/>
                 <span t-field="o.company_id.name"/>
                 <br/>

@@ -245,19 +245,21 @@ class WizardReport_2(models.TransientModel): # aqui declaro las variables del wi
             ])
         for det in cursor_resumen:
             #det2=det.lines_id.search([('code','=',id_code.code)])
-            for det_line in det.lines_id:
-                values={
-                'fecha_comprobante':det.date_isrl,
-                'invoice_id':det.invoice_id.id,
-                'retention_id':det_line.retention_id.id,
-                'code':det_line.code,
-                'abono_cta':abs(det.invoice_id.amount_total_signed),
-                'cant_retencion':det_line.base,
-                'porcentaje':det_line.cantidad,
-                'total':det_line.total,
-                #'id_code':id_code.id,
-                }
-                pdf_id = t.create(values)
+            #if det.invoice_id.type=="in_invoice" or det.invoice_id.type=="in_refund" or det.invoice_id.type=="in_recept":
+            if det.invoice_id.type=="in_invoice" or det.invoice_id.type=="in_refund":
+	            for det_line in det.lines_id:
+	                values={
+	                'fecha_comprobante':det.date_isrl,
+	                'invoice_id':det.invoice_id.id,
+	                'retention_id':det_line.retention_id.id,
+	                'code':det_line.code,
+	                'abono_cta':abs(det.invoice_id.amount_total_signed),
+	                'cant_retencion':det_line.base,
+	                'porcentaje':det_line.cantidad,
+	                'total':det_line.total,
+	                #'id_code':id_code.id,
+	                }
+	                pdf_id = t.create(values)
         #self.line_people = self.env['resumen.islr.wizard.pdf'].search([])
 
     def arma_tabla_code(self):

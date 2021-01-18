@@ -39,25 +39,25 @@ class AccountMove(models.Model):
 
     def funcion_numeracion_fac(self):
         if self.type=="in_invoice":
-            busca_correlativos = self.env['account.move'].search([('invoice_number','=',self.invoice_number_pro),('id','!=',self.id)])
+            busca_correlativos = self.env['account.move'].search([('invoice_number','=',self.invoice_number_pro),('id','!=',self.id),('partner_id','=',self.partner_id.id)])
             for det_corr in busca_correlativos:
                 if det_corr.invoice_number:
-                    raise UserError(_(' El valor :%s ya se uso en otro documento')%det_corr.invoice_number)
+                    raise UserError(_(' El valor :%s ya se uso en otro documento de este proveedor')%det_corr.invoice_number)
 
-            busca_correlativos2 = self.env['account.move'].search([('invoice_ctrl_number','=',self.invoice_ctrl_number_pro),('id','!=',self.id)])
+            """busca_correlativos2 = self.env['account.move'].search([('invoice_ctrl_number','=',self.invoice_ctrl_number_pro),('id','!=',self.id)])
             for det_corr2 in busca_correlativos2:
                 if det_corr2.invoice_ctrl_number:
-                    raise UserError(_(' El nro de control :%s ya se uso en otro documento')%det_corr2.invoice_ctrl_number)
+                    raise UserError(_(' El nro de control :%s ya se uso en otro documento')%det_corr2.invoice_ctrl_number)"""
             
             self.invoice_number=self.invoice_number_pro
             self.invoice_ctrl_number=self.invoice_ctrl_number_pro
             partners='pro' # aqui si es un proveedor
 
         if self.type=="in_refund" or self.type=="in_receipt":
-            busca_correlativos = self.env['account.move'].search([('invoice_number','=',self.refuld_number_pro),('id','!=',self.id)])
+            busca_correlativos = self.env['account.move'].search([('invoice_number','=',self.refuld_number_pro),('id','!=',self.id),('partner_id','=',self.partner_id.id)])
             for det_corr in busca_correlativos:
                 if det_corr.invoice_number:
-                    raise UserError(_(' El valor :%s ya se uso en otro documento')%det_corr.invoice_number)
+                    raise UserError(_(' El valor :%s ya se uso en otro documento de este proveedor')%det_corr.invoice_number)
 
             busca_correlativos2 = self.env['account.move'].search([('invoice_ctrl_number','=',self.refund_ctrl_number_pro),('id','!=',self.id)])
             for det_corr2 in busca_correlativos2:

@@ -8,6 +8,10 @@ class CompanyInherit(models.Model):
     _inherit = 'res.company'
 
     vat = fields.Char(related='partner_id.vat', string="Tax ID", readonly=False)
+    confg_ret_proveedores = fields.Selection([
+        ('c','La Compañia'),
+        ('p','Del Proveedor'),
+    ], string='Type of taxpayer', default="c")
     type_taxpayer = fields.Selection([
         ('legal','Legal'),
         ('natural','Natural'),

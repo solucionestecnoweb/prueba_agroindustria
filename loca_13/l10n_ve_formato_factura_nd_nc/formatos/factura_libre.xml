@@ -24,7 +24,7 @@
               <t t-call="web.basic_layout" >
                 <div class="page">
                   <table width="100%"  class="table table-condensed ">
-                    <tr>
+                    <tr style="font-size:13px;">
                       <td>CLIENTE:</td>
                       <td colspan="4"><t t-esc="docs.partner_id.name"/></td>
                       <t t-if="docs.type== 'out_invoice' ">
@@ -37,26 +37,26 @@
                       <td>NOTA DE DÉBITO:<t t-esc="docs.invoice_number"/></td>
                       </t>
                     </tr>
-                    <tr>
+                    <tr style="font-size:13px;">
                       <td>RIF:</td>
                       <td colspan="5"><t t-esc="docs.doc_cedula(docs.partner_id.id)"/></td>
                     </tr>
-                    <tr>
+                    <tr style="font-size:13px;">
                       <td>DIRECCIÓN:</td>
                       <td colspan="3"><t t-esc="docs.partner_id.street"/></td>
                       <td colspan="2"></td>
                     </tr>
-                    <tr>
+                    <tr style="font-size:13px;">
                       <td>TELÉFONOS:</td>
                       <td colspan="5"><t t-esc="docs.partner_id.phone"/>/<t t-esc="docs.partner_id.mobile"/></td>
                     </tr>
-                    <tr>
+                    <tr style="font-size:13px;">
                       <td>EMAIL:</td>
                       <td colspan="3"><t t-esc="docs.partner_id.email"/></td>
-                      <td colspan="2">FECHA DE EMISIÓN:<t t-esc="docs.formato_fecha(docs.date_actual)"/></td>
+                      <td colspan="2" style="font-size:12px;">FECHA DE EMISIÓN:<t t-esc="docs.formato_fecha(docs.date_actual)"/></td>
                     </tr>
                     <tbody class="table table-bordered">
-                      <tr align="center">
+                      <tr align="center" style="font-size:12px;">
                         <td>ITEM/COD</td>
                         <td>DESCRIPCIÓN</td>
                         <td>CANT.</td>
@@ -73,7 +73,7 @@
                     <t t-set="total_factura" t-value="0"/>
 
                     <t t-foreach="docs.invoice_line_ids" t-as="o">
-                    <tr>
+                    <tr style="font-size:12px;">
                       <td><t t-esc="o.product_id.default_code"/></td>
                       <td><t t-esc="o.product_id.name"/></td>
                       <td><div align="center"><t t-esc="o.quantity"/></div></td>
@@ -95,14 +95,14 @@
                     </tr>
                     </t>
 
-                    <tr>
+                    <tr style="font-size:12px;">
                       <td colspan="5"><div align="right">SUBTOTAL(Bs):</div></td>
                       <td colspan="1"><div align="right"><t t-esc="docs.float_format(acum_subtotal)"/></div></td>
                       <t t-set="total_factura" t-value="total_factura+acum_subtotal"/>
                     </tr>
 
                     <t t-if="acum_alicuota_general!= 0 ">
-                    <tr>
+                    <tr style="font-size:12px;">
                       <td colspan="5"><div align="right">I.V.A(16%):</div></td>
                       <td><div align="right"><t t-esc="docs.float_format(acum_alicuota_general)"/></div></td>
                       <t t-set="total_factura" t-value="total_factura+acum_alicuota_general"/>
@@ -110,7 +110,7 @@
                     </t>
 
                     <t t-if="acum_alicuota_reducida!= 0 ">
-                    <tr>
+                    <tr style="font-size:12px;">
                       <td colspan="5"><div align="right">I.V.A(8%):</div></td>
                       <td><div align="right"><t t-esc="docs.float_format(acum_alicuota_reducida)"/></div></td>
                       <t t-set="total_factura" t-value="total_factura+acum_alicuota_reducida"/>
@@ -118,14 +118,14 @@
                     </t>
 
                     <t t-if="acum_alicuota_adicional!= 0 ">
-                    <tr>
+                    <tr style="font-size:12px;">
                       <td colspan="5"><div align="right">I.V.A(31%):</div></td>
                       <td><div align="right"><t t-esc="docs.float_format(acum_alicuota_adicional)"/></div></td>
                       <t t-set="total_factura" t-value="total_factura+acum_alicuota_adicional"/>
                     </tr>
                     </t>
 
-                    <tr>
+                    <tr style="font-size:12px;">
                       <td colspan="5"><div align="right">TOTAL A PAGAR:</div></td>
                       <td><div align="right"><t t-esc="docs.float_format(total_factura)"/></div></td>
                     </tr>
