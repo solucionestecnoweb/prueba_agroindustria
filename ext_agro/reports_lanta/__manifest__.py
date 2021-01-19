@@ -31,6 +31,6 @@
         'reports/invetory_labels.xml',
         'reports/mrp_production.xml',
         'reports/nc_lanta.xml',
-        'reports/nd_lanta.xml'
+        'reports/nd_lanta.xml',
     ],
 }
