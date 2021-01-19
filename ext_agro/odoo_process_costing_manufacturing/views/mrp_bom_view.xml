@@ -7,6 +7,9 @@
         <field name="model">mrp.bom</field>
         <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
         <field name="arch" type="xml">
+            <xpath expr="//field[@name='type']" position="after">
+                <field name="custom_currency_id" />
+            </xpath>
             <xpath expr="//page[last()]" position="after">
                 <page string="Direct Materials Cost">
                     <group>

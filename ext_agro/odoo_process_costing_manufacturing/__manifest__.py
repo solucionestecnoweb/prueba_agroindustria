@@ -14,6 +14,7 @@
             'mrp',
             'stock',
             'sales_team',
+            'l10n_ve_fiscal_requirements',
     ],
     'description': """
 Odoo Process Costing Manufacturing
@@ -273,6 +274,8 @@ work in process
         'views/mrp_job_cost_sheet_view.xml',
         'views/mrp_production_view.xml',
         'views/work_order_view.xml',
+        'views/res_config_view.xml',
+        'views/company_inherit_views.xml',
         'report/manufacturing_report_view.xml',
         'report/bom_report_view.xml',
     ],

@@ -175,11 +175,28 @@ class MrpProduction(models.Model):
     )
     custom_currency_id = fields.Many2one(
         'res.currency', 
+        related='bom_id.custom_currency_id',
         default=lambda self: self.env.user.company_id.currency_id, 
         string='Currency', 
         readonly=True
     )
+    """custom_currency_id = fields.Many2one(
+        'res.currency', 
+        default=lambda self: self.env.user.company_id.currency_id, 
+        string='Currency', 
+        #readonly=True
+    )"""
     
+    precio_venta = fields.Float(string="Precio de venta Producto", compute='_compute_precio_venta')
+
+    @api.depends('final_total_cost')
+    def _compute_precio_venta(self):
+      for rec in self:
+        rec.precio_venta=rec.final_total_cost+(rec.final_total_cost*rec.company_id.porcentaje_ganancia/100)
+        rec.product_id.list_price=rec.final_total_cost+(rec.final_total_cost*rec.company_id.porcentaje_ganancia/100)
+        rec.product_id.standard_price=rec.final_total_cost
+        #rec.product_id.=rec.custom_currency_id.id
+
     #@api.multi
     def _generate_workorders(self, exploded_boms):
         result = super(MrpProduction, self)._generate_workorders(exploded_boms)

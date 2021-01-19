@@ -97,8 +97,13 @@ class MrpBom(models.Model):
         store=True,
     )
     custom_currency_id = fields.Many2one(
+        'res.currency', 
+        default=lambda self: self.env.user.company_id.currency_id, 
+        string='Currency',
+    )
+    """custom_currency_id = fields.Many2one(
         'res.currency',
         related='company_id.currency_id',
         store=True,
         string='Currency',
-    )
+    )"""
