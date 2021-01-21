@@ -8,10 +8,10 @@
         <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='type']" position="after">
-                <field name="custom_currency_id" />
+                <field name="custom_currency_id" string="Moneda" />
             </xpath>
             <xpath expr="//page[last()]" position="after">
-                <page string="Direct Materials Cost">
+                <page string="Costo directo de materiales">
                     <group>
                         <field name="direct_material_ids" nolabel="1" context="{'default_job_type': 'material'}"/>
                     </group>
@@ -26,7 +26,7 @@
 <!--                        </div>-->
                     </group>
                 </page>
-                <page string="Direct Labour Cost">
+                <page string="Costo laboral directo">
                     <group>
                         <field name="labour_cost_ids" nolabel="1" context="{'default_job_type': 'labour'}"/>
                     </group>
@@ -41,7 +41,7 @@
 <!--                        </div>-->
                     </group>
                 </page>
-                <page string="Overhead Cost">
+                <page string="Costo general">
                     <group>
                     <field name="overhead_cost_ids" nolabel="1" context="{'default_job_type': 'overhead'}"/>
                     </group>
