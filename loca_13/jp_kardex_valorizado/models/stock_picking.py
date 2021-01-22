@@ -23,12 +23,14 @@ class StockPicking(models.Model):
     
     @api.constrains('scheduled_date')
     def set_constrains_scheduled_date(self):
-        if self.use_kardex_date : 
-            self.kardex_date = self.scheduled_date
+        for selff in self:
+            if selff.use_kardex_date : 
+                selff.kardex_date = selff.scheduled_date
 
     @api.constrains('picking_type_id', 'state')
     def constrains_type_operation_sunat_id(self):
-        self.set_type_operation_sunat_id()
+        for selff in self:
+            selff.set_type_operation_sunat_id()
 
     @api.onchange('picking_type_id')
     def onchange_type_operation_sunat_id(self):
