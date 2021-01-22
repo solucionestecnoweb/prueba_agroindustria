@@ -20,6 +20,8 @@ class AccountMove(models.Model):
     _inherit = 'account.move'
 
     date_actual = fields.Date(default=lambda *a:datetime.now().strftime('%Y-%m-%d'))
+    act_nota_entre=fields.Boolean(default=False)
+    correlativo_nota_entrega = fields.Char(required=False)
 
     def float_format(self,valor):
         #valor=self.base_tax
@@ -31,6 +33,36 @@ class AccountMove(models.Model):
         else:
             result = "0,00"
         return result
+
+    def action_post(self):
+        super().action_post()
+        if self.act_nota_entre==True:
+            self.correlativo_nota_entrega=self.get_nro_nota_entrega()
+
+    def get_nro_nota_entrega(self):
+        '''metodo que crea el Nombre del asiento contable si la secuencia no esta creada, crea una con el
+        nombre: 'l10n_ve_cuenta_retencion_iva'''
+
+        self.ensure_one()
+        SEQUENCE_CODE = 'l10n_ve_nro_control_nota_entrega'
+        company_id = 1
+        IrSequence = self.env['ir.sequence'].with_context(force_company=1)
+        name = IrSequence.next_by_code(SEQUENCE_CODE)
+
+        # si aún no existe una secuencia para esta empresa, cree una
+        if not name:
+            IrSequence.sudo().create({
+                'prefix': '00-',
+                'name': 'Localización Venezolana Nro control Nota entrega %s' % 1,
+                'code': SEQUENCE_CODE,
+                'implementation': 'no_gap',
+                'padding': 4,
+                'number_increment': 1,
+                'company_id': 1,
+            })
+            name = IrSequence.next_by_code(SEQUENCE_CODE)
+        #self.refuld_number_pro=name
+        return name
 
     def formato_fecha(self,date):
         fecha = str(date)
