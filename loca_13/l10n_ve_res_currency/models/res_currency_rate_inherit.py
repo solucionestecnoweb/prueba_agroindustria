@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from odoo import models, fields, api
+from odoo import models, fields, api,_
 from datetime import timedelta, date, datetime
+from odoo.exceptions import UserError
 #Moneda..
 class CurrencyRate(models.Model):
     _inherit = "res.currency.rate"
@@ -9,7 +10,7 @@ class CurrencyRate(models.Model):
     hora = fields.Datetime('Fecha y Hora', default=lambda self: fields.datetime.today(), required=True)
     #name = fields.Datetime('Fecha y Hora', default=lambda self: fields.datetime.today(), required=True)
     rate_real = fields.Float(digits=(12, 2), help='se introduce la tasa real del mercado')
-    rate = fields.Float(digits=(12, 9), help='The rate of the currency to the currency of rate 1')
+    rate = fields.Float(digits=(12, 20), help='The rate of the currency to the currency of rate 1')
     _sql_constraints = [('unique_name_per_day', 'CHECK(1=1)', 'Only one currency rate per day allowed!')]
 
     @api.onchange('rate_real', 'hora')
@@ -19,6 +20,7 @@ class CurrencyRate(models.Model):
         if self.rate_real:
             tasa_real=self.rate_real
         rate = (1 /tasa_real)
+        #raise UserError(_("Rate=%s")%rate)
         self.rate = rate
         lista_tasa = self.env['res.currency.rate'].search([('name','=',hoy)],order='id asc')
         for det in lista_tasa:
@@ -31,7 +33,7 @@ class Currency(models.Model):
     _inherit = "res.currency"
 
     rate_real = fields.Float(compute='_compute_tasa_real', digits=(12, 2), help='se introduce la tasa real del mercado')
-    rate = fields.Float(compute='_compute_current_rate', string='Current Rate', digits=(12, 9),
+    rate = fields.Float(compute='_compute_current_rate', string='Current Rate', digits=(12, 20),
                         help='The rate of the currency to the currency of rate 1.')
     rate_rounding = fields.Float(digits=(12, 9), help='la tasa inversa del mercado')
 
