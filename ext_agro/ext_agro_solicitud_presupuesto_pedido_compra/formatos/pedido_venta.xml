@@ -144,7 +144,7 @@
                     </t>
 
                     <tr style="font-size:14px;">
-                      <td colspan="5"><div align="right" style="color: #968F78;">SUB TOTAL(<t t-esc="docs.pricelist_id.currency_id.name"/>):</div></td>
+                      <td colspan="5"><div align="right" style="color: #968F78;">SUB TOTAL(<t t-esc="docs.pricelist_id.currency_id.symbol"/>):</div></td>
                       <td colspan="1"><div align="right"><t t-esc="docs.float_format(acum_subtotal)"/></div></td>
                       <t t-set="total_factura" t-value="total_factura+acum_subtotal"/>
                     </tr>
@@ -174,7 +174,7 @@
                     </t>
 
                     <tr style="font-size:14px;">
-                      <td colspan="5"><div align="right" style="color: #968F78;">TOTAL A PAGAR (<t t-esc="docs.pricelist_id.currency_id.name"/>):</div></td>
+                      <td colspan="5"><div align="right" style="color: #968F78;">TOTAL A PAGAR (<t t-esc="docs.pricelist_id.currency_id.symbol"/>):</div></td>
                       <td><div align="right"><t t-esc="docs.float_format(total_factura)"/></div></td>
                     </tr>
                   </tbody>
