@@ -77,9 +77,9 @@
                       <td><t t-esc="o.product_id.default_code"/></td>
                       <td><t t-esc="o.product_id.name"/></td>
                       <td><div align="center"><t t-esc="o.quantity"/></div></td>
-                      <td><div align="right"><t t-esc="o.float_format(o.price_unit)"/></div></td>
+                      <td><div align="right"><t t-esc="o.float_format(o.fact_div_line(o.price_unit))"/></div></td>
                       <td><div align="center"><t t-esc="o.tax_ids.amount"/>%</div></td>
-                      <td><div align="right"><t t-esc="o.float_format(o.price_subtotal)"/>
+                      <td><div align="right"><t t-esc="o.float_format(o.fact_div_line(o.price_subtotal))"/>
 
                           <t t-set="acum_subtotal" t-value="acum_subtotal+o.price_subtotal"/></div></td>
                       <t t-if="o.tax_ids.aliquot== 'general' ">
@@ -96,15 +96,17 @@
                     </t>
 
                     <tr style="font-size:12px;">
-                      <td colspan="5"><div align="right">SUBTOTAL(Bs):</div></td>
-                      <td colspan="1"><div align="right"><t t-esc="docs.float_format(acum_subtotal)"/></div></td>
+                      <td colspan="5"><div align="right">SUBTOTAL:</div></td>
+                      <td colspan="1"><div align="right"><t t-esc="docs.float_format(docs.fact_div(acum_subtotal))"/>
+                  		<t t-esc="docs.doc_currency_id.symbol"/></div></td>
                       <t t-set="total_factura" t-value="total_factura+acum_subtotal"/>
                     </tr>
 
                     <t t-if="acum_alicuota_general!= 0 ">
                     <tr style="font-size:12px;">
                       <td colspan="5"><div align="right">I.V.A(16%):</div></td>
-                      <td><div align="right"><t t-esc="docs.float_format(acum_alicuota_general)"/></div></td>
+                      <td><div align="right"><t t-esc="docs.float_format(docs.fact_div(acum_alicuota_general))"/><t t-esc="docs.doc_currency_id.symbol"/></div>
+                  	  </td>
                       <t t-set="total_factura" t-value="total_factura+acum_alicuota_general"/>
                     </tr>
                     </t>
@@ -112,7 +114,8 @@
                     <t t-if="acum_alicuota_reducida!= 0 ">
                     <tr style="font-size:12px;">
                       <td colspan="5"><div align="right">I.V.A(8%):</div></td>
-                      <td><div align="right"><t t-esc="docs.float_format(acum_alicuota_reducida)"/></div></td>
+                      <td><div align="right"><t t-esc="docs.float_format(docs.fact_div(acum_alicuota_reducida))"/><t t-esc="docs.doc_currency_id.symbol"/></div>
+                  	  </td>
                       <t t-set="total_factura" t-value="total_factura+acum_alicuota_reducida"/>
                     </tr>
                     </t>
@@ -120,14 +123,16 @@
                     <t t-if="acum_alicuota_adicional!= 0 ">
                     <tr style="font-size:12px;">
                       <td colspan="5"><div align="right">I.V.A(31%):</div></td>
-                      <td><div align="right"><t t-esc="docs.float_format(acum_alicuota_adicional)"/></div></td>
+                      <td><div align="right"><t t-esc="docs.float_format(docs.fact_div(acum_alicuota_adicional))"/><t t-esc="docs.doc_currency_id.symbol"/></div>
+                  	  </td>
                       <t t-set="total_factura" t-value="total_factura+acum_alicuota_adicional"/>
                     </tr>
                     </t>
 
                     <tr style="font-size:12px;">
                       <td colspan="5"><div align="right">TOTAL A PAGAR:</div></td>
-                      <td><div align="right"><t t-esc="docs.float_format(total_factura)"/></div></td>
+                      <td><div align="right"><t t-esc="docs.float_format(docs.fact_div(total_factura))"/><t t-esc="docs.doc_currency_id.symbol"/></div>
+                      </td>
                     </tr>
                   </table>
     
@@ -142,7 +147,7 @@
     <report
             id="account_facturas"
             model="account.move"
-            string="Documento Forma Libre"
+            string="Factura/NC/ND"
             report_type="qweb-pdf"
             name="l10n_ve_formato_factura_nd_nc.report_invoice_with_payments_copy"
             file="l10n_ve_formato_factura_nd_nc.report_invoice_with_payments_copy"

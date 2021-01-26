@@ -8,10 +8,14 @@
             
             <xpath expr="//field[@name='partner_id']" position="after">
 
-                <field name="act_nota_entre" string="Aplica Nota de Entrega?:" widget="boolean_toggle" attrs="{'invisible': [('type', 'in',('in_invoice','in_refund','in_receipt'))], 'readonly':[('state','=','posted')]}"/>
+                <field name="act_nota_entre" string="Aplica Nota de Entrega?:" widget="boolean_toggle" attrs="{'invisible': ['|',('type', 'in',('in_invoice','in_refund','in_receipt')),('type', 'not in', ('out_invoice', 'out_refund', 'in_invoice', 'in_refund'))], 'readonly':[('state','=','posted')]}"/>
 
-            	<field name="correlativo_nota_entrega" string="Nota Entrega Nro:" attrs="{'invisible': [('act_nota_entre', '=',False)]}" readonly="1"/>
-            </xpath>            
+            	<field name="correlativo_nota_entrega" string="Nota Entrega Nro:" attrs="{'invisible': ['|',('act_nota_entre', '=',False),('type', 'not in', ('out_invoice', 'out_refund', 'in_invoice', 'in_refund'))]}" readonly="1"/>
+            </xpath>  
+
+            <xpath expr="//field[@name='currency_id']" position="after">
+                <field name="doc_currency_id" attrs="{'invisible': [('type', 'not in', ('out_invoice', 'out_refund', 'in_invoice', 'in_refund'))]}"/>
+            </xpath>          
         </field>
     </record>
 

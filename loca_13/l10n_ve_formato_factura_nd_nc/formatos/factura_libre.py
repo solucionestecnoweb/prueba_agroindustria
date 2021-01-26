@@ -22,6 +22,8 @@ class AccountMove(models.Model):
     date_actual = fields.Date(default=lambda *a:datetime.now().strftime('%Y-%m-%d'))
     act_nota_entre=fields.Boolean(default=False)
     correlativo_nota_entrega = fields.Char(required=False)
+    doc_currency_id = fields.Many2one("res.currency", string="Moneda del documento Físico",required=True)
+
 
     def float_format(self,valor):
         #valor=self.base_tax
@@ -108,6 +110,28 @@ class AccountMove(models.Model):
         resultado=str(tipo_doc)+"-"+str(nro_doc)
         return resultado
 
+    def fact_div(self,valor):
+        self.currency_id.id
+        fecha_contable_doc=self.date
+        monto_factura=self.amount_total
+        valor_aux=0
+        #raise UserError(_('moneda compañia: %s')%self.company_id.currency_id.id)
+        if self.currency_id.id!=self.doc_currency_id.id:
+            if self.currency_id!=self.company_id.currency_id.id:
+                tasa= self.env['account.move'].search([('id','=',self.id)],order="id asc")
+                for det_tasa in tasa:
+                    monto_nativo=det_tasa.amount_untaxed_signed
+                    monto_extran=det_tasa.amount_untaxed
+                    valor_aux=abs(monto_nativo/monto_extran)
+                rate=round(valor_aux,3)  # LANTA
+                #rate=round(valor_aux,2)  # ODOO SH
+                resultado=valor*rate
+            else:
+                resultado=valor
+        else:
+            resultado=valor
+        return resultado
+
 class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
 
@@ -131,18 +155,16 @@ class AccountMoveLine(models.Model):
             result = "0,00"
         return result
 
-    def conv_div_nac(self,valor):
-        self.currency_id.id
-        fecha_contable_doc=self.date
-        monto_factura=self.amount_total
+    def fact_div_line(self,valor):
         valor_aux=0
         #raise UserError(_('moneda compañia: %s')%self.company_id.currency_id.id)
-        if self.currency_id.id!=self.company_id.currency_id.id:
-            tasa= self.env['res.currency.rate'].search([('currency_id','=',self.currency_id.id),('name','<=',self.date)],order="name asc")
+        if self.move_id.currency_id.id!=self.move_id.doc_currency_id.id:
+            tasa= self.env['account.move'].search([('id','=',self.move_id.id)],order="id asc")
             for det_tasa in tasa:
-                if fecha_contable_doc>=det_tasa.name:
-                    valor_aux=det_tasa.rate
-            rate=round(1/valor_aux,2)  # LANTA
+                monto_nativo=det_tasa.amount_untaxed_signed
+                monto_extran=det_tasa.amount_untaxed
+                valor_aux=abs(monto_nativo/monto_extran)
+            rate=round(valor_aux,3)  # LANTA
             #rate=round(valor_aux,2)  # ODOO SH
             resultado=valor*rate
         else:
