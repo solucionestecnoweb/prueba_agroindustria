@@ -22,7 +22,7 @@ class AccountMove(models.Model):
     date_actual = fields.Date(default=lambda *a:datetime.now().strftime('%Y-%m-%d'))
     act_nota_entre=fields.Boolean(default=False)
     correlativo_nota_entrega = fields.Char(required=False)
-    doc_currency_id = fields.Many2one("res.currency", string="Moneda del documento Físico",required=True)
+    doc_currency_id = fields.Many2one("res.currency", string="Moneda del documento Físico")
 
 
     def float_format(self,valor):
