@@ -279,6 +279,7 @@ work in process
         'wizard/wizard_costo_ganancia.xml',
         'report/manufacturing_report_view.xml',
         'report/bom_report_view.xml',
+        'report/costo_ganancia.xml',
     ],
     'installable' : True,
     'application' : False,
