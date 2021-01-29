@@ -35,8 +35,8 @@
             <field name="inherit_id" ref="maintenance.hr_equipment_request_view_form"/>
             <field name="arch" type="xml">
                 <data>
-                    <!-- <xpath expr="//form/sheet/field[@name='description']" position="replace"/> -->
-                    <xpath expr="//form/sheet/group" position="before">
+                    
+                    <!--xpath expr="//form/sheet/group" position="before">
                         <div class="oe_button_box" name="button_box">
                             <button class="oe_stat_button" name="%(action_internal_transfer_tree_custom)d"
                                 type="action" icon="fa-refresh" 
@@ -45,7 +45,7 @@
                                 type="action" icon="fa-shopping-cart"
                                 groups="maintenance.group_equipment_manager,purchase.group_purchase_manager,stock.group_stock_manager" string="Compras"/>
                         </div>
-                    </xpath>
+                    </xpath-->
                     <xpath expr="//form/sheet" position="inside">
 
                     <notebook>
