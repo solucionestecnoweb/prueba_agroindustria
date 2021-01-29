@@ -276,6 +276,7 @@ work in process
         'views/work_order_view.xml',
         'views/res_config_view.xml',
         'views/company_inherit_views.xml',
+        'views/product_templete_inherit.xml',
         'wizard/wizard_costo_ganancia.xml',
         'report/manufacturing_report_view.xml',
         'report/bom_report_view.xml',

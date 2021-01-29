@@ -84,7 +84,7 @@ class costo_ganancia(models.TransientModel):
         #self.env['stock.wizard.costo.ganancia'].search([]).unlink()
 
     def lista_producto(self):
-        cursor_resumen = self.env['product.template'].search([('sale_ok','=','True')],order ="id ASC")
+        cursor_resumen = self.env['product.template'].search([('sale_ok','=','True'),('producto_terminado','=','s')],order ="id ASC")
         t=self.env['stock.wizard.pdf.costogana']
         d=t.search([])
         for det in cursor_resumen:
