@@ -7,11 +7,11 @@
     'category': 'Inventory Management',
     'summary': 'Allow you to manage Maintenance request using Purchase and Stock',
     'price': 49.0,
-    'currency': 'EUR',
+    'currency': '$',
     'images': ['static/description/img.jpg'],
     'live_test_url': 'https://youtu.be/xTmIEi0TwLg',
-    'author' : 'Probuse Consulting Service Pvt. Ltd.',
-    'website': 'www.probuse.com',
+    'author' : 'INM&LDR Soluciones Tecnologicas',
+    'website': 'xxxx.com',
     'version': '2.0',
     'description': """
 Equipment Maintanance/Repair - Stock Management

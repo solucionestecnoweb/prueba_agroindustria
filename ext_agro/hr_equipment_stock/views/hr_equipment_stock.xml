@@ -40,27 +40,27 @@
                         <div class="oe_button_box" name="button_box">
                             <button class="oe_stat_button" name="%(action_internal_transfer_tree_custom)d"
                                 type="action" icon="fa-refresh" 
-                                groups="maintenance.group_equipment_manager,purchase.group_purchase_manager,stock.group_stock_manager" string="Internal Transfers" />
+                                groups="maintenance.group_equipment_manager,purchase.group_purchase_manager,stock.group_stock_manager" string="Transferencia Interna" />
                             <button class="oe_stat_button" name="%(action_po_tree_custom)d" 
                                 type="action" icon="fa-shopping-cart"
-                                groups="maintenance.group_equipment_manager,purchase.group_purchase_manager,stock.group_stock_manager" string="Purchase"/>
+                                groups="maintenance.group_equipment_manager,purchase.group_purchase_manager,stock.group_stock_manager" string="Compras"/>
                         </div>
                     </xpath>
                     <xpath expr="//form/sheet" position="inside">
 
                     <notebook>
-                    <page string="Operation">
-                        <separator string="Maintenance Lines" groups="maintenance.group_equipment_manager,purchase.group_purchase_manager,stock.group_stock_manager" />
-                        <button class="oe_highlight" string="Compute" name="parts_operation" type="object"   groups="maintenance.group_equipment_manager,stock.group_stock_manager"/>
+                    <page string="Operación">
+                        <separator string="Lineas de Mantenimiento" groups="maintenance.group_equipment_manager,purchase.group_purchase_manager,stock.group_stock_manager" />
+                        <button class="oe_highlight" string="Computar" name="parts_operation" type="object"   groups="maintenance.group_equipment_manager,stock.group_stock_manager"/>
                         <field name="custom_needed_parts" nolable='1' groups="maintenance.group_equipment_manager,purchase.group_purchase_manager,stock.group_stock_manager">
                             <tree editable="top">
-                                <field name="product_id"/>
-                                <field name="qty"/>
-                                <field name="product_stock" />
+                                <field name="product_id" string="Producto"/>
+                                <field name="qty" string="Cantidad"/>
+                                <field name="product_stock" string="Stock Disponible"/>
                                 <field name="compute_done" readonly='1' invisible='1'/>
                             </tree>
                         </field>
-                        <separator string="Related Purchase Requisitions" groups="maintenance.group_equipment_manager,purchase.group_purchase_manager,stock.group_stock_manager"/>
+                        <!--separator string="Related Purchase Requisitions" groups="maintenance.group_equipment_manager,purchase.group_purchase_manager,stock.group_stock_manager"/>
                         <button class="oe_highlight" string="Create Purchase Requisition" name="create_purchase_requisition" type="object" groups="maintenance.group_equipment_manager,purchase.group_purchase_manager,stock.group_stock_manager"/>
                         <field name="custom_equipment_line1" nolable='1' groups="maintenance.group_equipment_manager,purchase.group_purchase_manager,stock.group_stock_manager">
                             <tree editable="top">
@@ -75,9 +75,9 @@
                                 <field name="product_id"/>
                                 <field name="qty"/>
                             </tree>
-                        </field>
-                        <!-- <field name='description' placeholder="Internal Note ......."/> -->
-                        </page>
+                        </field-->
+                        
+                    </page>
                         </notebook>
                     </xpath>
 
