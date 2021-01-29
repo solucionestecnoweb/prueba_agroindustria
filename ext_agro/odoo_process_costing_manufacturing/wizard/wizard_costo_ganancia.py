@@ -29,6 +29,17 @@ class CostoGananciaModelo(models.Model):
     costo_total = fields.Float()
     ganancia_total = fields.Float()
 
+    def float_format(self,valor):
+        #valor=self.base_tax
+        if valor:
+            result = '{:,.2f}'.format(valor)
+            result = result.replace(',','*')
+            result = result.replace('.',',')
+            result = result.replace('*','.')
+        else:
+            result="0,00"
+        return result
+
 class costo_ganancia(models.TransientModel):
     _name = "stock.wizard.costo.ganancia" ## = nombre de la carpeta.nombre del archivo deparado con puntos
 
@@ -75,6 +86,26 @@ class costo_ganancia(models.TransientModel):
         if tipo_doc=="p":
             tipo_doc="P"
         resultado=str(tipo_doc)+str(nro_doc)
+        return resultado
+
+    def float_format2(self,valor):
+        #valor=self.base_tax
+        if valor:
+            result = '{:,.2f}'.format(valor)
+            result = result.replace(',','*')
+            result = result.replace('.',',')
+            result = result.replace('*','.')
+        else:
+            result="0,00"
+        return result
+
+    def periodo(self,date):
+        fecha = str(date)
+        fecha_aux=fecha
+        ano=fecha_aux[0:4]
+        mes=fecha[5:7]
+        dia=fecha[8:10]  
+        resultado=dia+"/"+mes+"/"+ano
         return resultado
 
     def print_costo_ganancia(self):

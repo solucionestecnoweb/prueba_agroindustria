@@ -40,10 +40,10 @@
                     </td>
                     </tr>
                     <tr>
-                      <td colspan="2"><br/>Desde: <t t-esc="docs.date_from"/></td>
+                      <td colspan="2"><br/>Desde: <t t-esc="docs.periodo(docs.date_from)"/></td>
                     </tr>
                     <tr>
-                      <td colspan="2">Hasta: <t t-esc="docs.date_to"/></td>
+                      <td colspan="2">Hasta: <t t-esc="docs.periodo(docs.date_to)"/></td>
                     </tr>
 
             </table>
@@ -64,17 +64,25 @@
                 <td>TOTAL VENTA</td>
                 <td>GANANCIA</td>
               </tr>
+                <t t-set="total_costo" t-value="0"/>
+                <t t-set="total_sub" t-value="0"/>
+                <t t-set="total_ganancia" t-value="0"/>
               <t t-foreach="docs.line" t-as="o">
                 <tr style="font-size:12px;">
                 <td><t t-esc="o.product_id.name"/></td>
-                <td align="right"><t t-esc="o.costo_unit"/>.</td>
-                <td align="right"><t t-esc="o.cantidad"/></td>
-                <td align="right"><t t-esc="o.costo_total"/></td>
-                <td align="right"><t t-esc="o.valor_venta_unit"/></td>
-                <td align="right"><t t-esc="o.sub_total"/></td>
-                <td align="right"><t t-esc="o.ganancia_total"/></td>
+                <td align="right"><t t-esc="o.float_format(o.costo_unit)"/></td>
+                <td align="right"><t t-esc="o.float_format(o.cantidad)"/></td>
+                <td align="right"><t t-esc="o.float_format(o.costo_total)"/><t t-set="total_costo" t-value="total_costo+o.costo_total"/></td>
+                <td align="right"><t t-esc="o.float_format(o.valor_venta_unit)"/></td>
+                <td align="right"><t t-esc="o.float_format(o.sub_total)"/><t t-set="total_sub" t-value="total_sub+o.sub_total"/></td>
+                <td align="right"><t t-esc="o.float_format(o.ganancia_total)"/><t t-set="total_ganancia" t-value="total_ganancia+o.ganancia_total"/></td>
               </tr>
               </t>
+              <tr style="font-size:13px; color:#332DAD">
+                <td colspan="4" align="right"><t t-esc="docs.float_format2(total_costo)"/></td>
+                <td colspan="2" align="right"><t t-esc="docs.float_format2(total_sub)"/></td>
+                <td align="right"><t t-esc="docs.float_format2(total_ganancia)"/></td>
+              </tr>
             </tbody>
             </table>
           </div>
