@@ -20,6 +20,7 @@
         # 'security/ir.model.access.csv',
         #'views/account_invoice_inherit.xml',
         'views/res_currency_rate_inherit_.xml',
+        'views/product_templete_inherit.xml',
 
     ],
     # only loaded in demonstration mode

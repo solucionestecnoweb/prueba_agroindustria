@@ -27,7 +27,15 @@ class CurrencyRate(models.Model):
             lista_tasa.write({
                 'name': (datetime.now() - timedelta(days=(1))),
                 })
+        self.convercion_precio_product()
         #self.name=datetime.now() - timedelta(days=(1))
+
+    def convercion_precio_product(self):
+        lista_product = self.env['product.template'].search([('moneda_divisa_venta', '=', self.currency_id.id)],order='id asc')
+        if lista_product:
+            for cor in lista_product:
+                precio=cor.list_price2*self.rate_real
+                cor.list_price=precio
 
 class Currency(models.Model):
     _inherit = "res.currency"
@@ -49,3 +57,11 @@ class Currency(models.Model):
             tasa_actual_inv=1
         self.rate_real=tasa_actual
         self.rate=tasa_actual_inv
+        self.convercion_precio_product2()
+
+    def convercion_precio_product2(self):
+        lista_product = self.env['product.template'].search([('moneda_divisa_venta', '=', self.id)],order='id asc')
+        if lista_product:
+            for cor in lista_product:
+                precio=cor.list_price2*self.rate_real
+                cor.list_price=precio
