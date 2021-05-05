@@ -192,9 +192,9 @@ class MrpProduction(models.Model):
     @api.depends('final_total_cost')
     def _compute_precio_venta(self):
       for rec in self:
-        rec.precio_venta=rec.final_total_cost+(rec.final_total_cost*rec.company_id.porcentaje_ganancia/100)
-        rec.product_id.list_price=rec.final_total_cost+(rec.final_total_cost*rec.company_id.porcentaje_ganancia/100)
-        rec.product_id.standard_price=rec.final_total_cost
+        rec.precio_venta=rec.unit_cost+(rec.unit_cost*rec.company_id.porcentaje_ganancia/100)
+        rec.product_id.list_price=rec.unit_cost+(rec.unit_cost*rec.company_id.porcentaje_ganancia/100)
+        rec.product_id.standard_price=rec.unit_cost
         #rec.product_id.=rec.custom_currency_id.id
 
     #@api.multi
